@@ -34,6 +34,11 @@ function myjsapp() {
             } catch (err) {
                 console.log('Oops, unable to copy');
             }
+        });
+
+        $('.end-call').click(function (event) {
+            // End established call
+            endCall();
         })
     }
 
@@ -98,7 +103,8 @@ function myjsapp() {
             });
 
             callButton.click(function (event) {
-                
+                initializeLocalVideo()
+                makeCall(toPeerId)                
             })
             // TODO - Hide panels if more than 3
         },
@@ -111,7 +117,16 @@ function myjsapp() {
                 delete chatPanel[id]
                 delete chatHistory[id]
             }
-        }
+        },
+        closeVideoCall : function () {
+            
+        },
+        setTheirVideo : function (stream) {
+            $('#their-video').prop('src', URL.createObjectURL(stream));
+        },
+        setOurVideo : function (stream) {
+            $('#our-video').prop('src', URL.createObjectURL(stream));
+        },
     };
 }
 

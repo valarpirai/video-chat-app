@@ -25,15 +25,6 @@
         <a class="navbar-brand" href="/">Peer JS Chat</a>
     </nav>
 
-    <!-- Header -->
-    <header>
-        <div class="container">
-            <div class="intro-text">
-                <div class="intro-lead-in">Welcome To Peer JS Chat</div>
-            </div>
-        </div>
-    </header>
-
     <section id="chat-app">
     	<div class="container">
     		<div class="row">
@@ -41,13 +32,13 @@
     				Your Peer ID: <h4 id="peer-id" data-toggle="tooltip" data-placement="top" title="Click to copy peer ID"></h3>
     			</div>
     			<div class="col-lg-6 col-md-6">
-    				<form class="form-inline">
+    				<div class="form-inline">
 						<div class="form-group mx-sm-3">
 							<label for="inputPeerUserId" class="sr-only">Password</label>
 							<input type="text" class="form-control" id="inputPeerUserId" placeholder="Peer ID">
 						</div>
-							<button type="button" class="btn btn-outline-primary" id='connect-btn'>Connect</button>
-						</form>
+						<button type="button" class="btn btn-outline-primary" id='connect-btn'>Connect</button>
+					</div>
     			</div>
     		</div>
     	</div>
@@ -64,7 +55,7 @@
     <div class="portfolio-modal modal fade" id="videoCallPanel" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="close-modal" data-dismiss="modal">
+                <div class="close-modal end-call" data-dismiss="modal">
                     <div class="lr">
                         <div class="rl">
                         </div>
@@ -78,7 +69,7 @@
                                 <h2>Video Call</h2>
                                 <p class="item-intro text-muted">Lorem ipsum dolor sit amet consectetur.</p>
                                 
-                                <button type="button" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-times"></i>End Call</button>
+                                <button type="button" class="btn btn-primary end-call" data-dismiss="modal"><i class="fa fa-times"></i>End Call</button>
                             </div>
                         </div>
                     </div>

@@ -12,13 +12,16 @@
 
     // Connect to server
     var peer = new Peer(generateRandomID(), { host: PEER_SERVER, port: PORT, path: '/', secure: true });
+    // var peer = new Peer({ host: 'my-peer.herokuapp.com', port: '443', path: '/', secure: true });
     console.log(peer)
 
     peerCallbacks(peer);
+    // initializeLocalVideo();
 
     // Generate random ID
     function generateRandomID() {
-        return Math.random().toString(36).substring(2);
+        // return Math.random().toString(36).substring(2);
+        return Math.random().toString(36).substring(8);
     }
 
     // Data channel
@@ -48,16 +51,31 @@
                     var dataView = new Uint8Array(data);
                     var dataBlob = new Blob([dataView]);
                     var url = window.URL.createObjectURL(dataBlob);
-                    $('#' + c.peer).find('.messages').append('<div><span class="file">' +
-                        c.peer + ' has sent you a <a target="_blank" href="' + url + '">file</a>.</span></div>');
+                    // $('#' + c.peer).find('.messages').append('<div><span class="file">' +
+                    //     c.peer + ' has sent you a <a target="_blank" href="' + url + '">file</a>.</span></div>');
                 }
             });
         }
         connectedPeers[c.peer] = 1;
     }
 
-    function call(peer_id) {
-        var conn = peer.call(peer_id);
+    function callConnect(call) {
+    	
+        // Hang up on an existing call if present
+	    if (window.existingCall) {
+	        window.existingCall.close();
+	    }
+
+	    // Wait for stream on the call, then set peer video display
+	    call.on('stream', function(stream) {
+	        myapp.setTheirVideo(stream)
+	    });
+
+	    // UI stuff
+	    window.existingCall = call;
+	    call.on('close', function() {
+	    	myapp.closeVideoCall()
+	    });
     }
 
     function peerCallbacks(peer) {
@@ -68,8 +86,12 @@
 
         peer.on('connection', connect);
 
-        peer.on('call', function(conn) {
+        peer.on('call', function(call) {
             // New call requests from users
+            // TODO - Confirm before accepting call
+            call.answer(window.localStream);
+
+            callConnect(call)
         });
 
         peer.on('close', function(conn) {
@@ -123,6 +145,30 @@
             	break;
             }
         }
+    }
+
+    function initializeLocalVideo() {
+		// Get audio/video stream
+		navigator.getUserMedia({audio: true, video: true}, function(stream) {
+			// Set your video displays
+			window.localStream = stream;
+		}, function(err) {
+			console.log("The following error occurred: " + err.name);
+		});
+    }
+
+    function makeCall(callerID) {
+    	console.log("Calling..." +  callerID)
+    	if(!window.localStream) {
+    		console.log("Video permission not granted")
+    	}
+    	var call = peer.call(callerID, window.localStream);
+    	callConnect(call)
+    }
+
+    function endCall() {
+    	if(window.existingCall)
+    		window.existingCall.close();
     }
 
     function closeConnection(id) {
