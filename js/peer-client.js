@@ -7,6 +7,9 @@
     var PORT = 443;
     var connectedPeers = {};
 
+    // Compatibility shim
+	navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+
     // Connect to server
     var peer = new Peer(generateRandomID(), { host: PEER_SERVER, port: PORT, path: '/', secure: true });
     console.log(peer)
@@ -76,7 +79,7 @@
 
         peer.on('disconnected', function(conn) {
         	console.log("Peer connection disconnected");
-        	peer.reconnect()
+        	// peer.reconnect()
         });
 
         peer.on('error', function(err) {

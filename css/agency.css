@@ -506,7 +506,6 @@ ul.chatHistory li {
   display: flex;
 }
 
-
 .chat-container {
   position: fixed;
   bottom: 0;
@@ -515,4 +514,8 @@ ul.chatHistory li {
 .chat-div {
   margin-left: 10px;
   margin-right: 10px;
+}
+.call-icon {
+  float: right;
+  cursor: pointer;
 }

@@ -65,11 +65,13 @@ function myjsapp() {
             var history = $('<ul class="chatHistory"></ul>')
             var message = $('<input type="text" class="form-control" placeholder="Enter Message">')
             var sendBtn = $('<button type="button" class="btn btn-outline-primary">Send</button>')
+            var callButton = $('<a href="#videoCallPanel" class="portfolio-link" data-toggle="modal">' +
+                    '<i class="fa fa-phone fa-2x call-icon" aria-hidden="true"></i></a>')
 
             chatHistory[toPeerId] = history
             chatPanel[toPeerId] = panel
 
-            $('.panel-heading', panel).append(title)
+            $('.panel-heading', panel).append(title).append(callButton)
             $('.panel-body', panel).append('<span class="text-primary">You can now start chatting</span>').append(history)
             $('.form-group', panel).append(message).append(sendBtn)
 
@@ -94,6 +96,10 @@ function myjsapp() {
                     message.val('').focus()
                 }
             });
+
+            callButton.click(function (event) {
+                
+            })
             // TODO - Hide panels if more than 3
         },
 
