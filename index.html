@@ -55,7 +55,7 @@
     <div class="portfolio-modal modal fade" id="videoCallPanel" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="close-modal end-call" data-dismiss="modal">
+                <div class="close-modal end-call hide" data-dismiss="modal">
                     <div class="lr">
                         <div class="rl">
                         </div>
@@ -67,7 +67,10 @@
                             <div class="modal-body">
                                 <!-- Project Details Go Here -->
                                 <h2>Video Call</h2>
-                                <p class="item-intro text-muted">Lorem ipsum dolor sit amet consectetur.</p>
+                                <div class="pure-u-2-3" id="video-container">
+                                    <video id="their-video" autoplay=""></video>
+                                    <video id="my-video" muted="true" autoplay=""></video>
+                                </div>
                                 
                                 <button type="button" class="btn btn-primary end-call" data-dismiss="modal"><i class="fa fa-times"></i>End Call</button>
                             </div>

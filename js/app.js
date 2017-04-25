@@ -103,7 +103,7 @@ function myjsapp() {
             });
 
             callButton.click(function (event) {
-                initializeLocalVideo()
+                // initializeLocalVideo()
                 makeCall(toPeerId)                
             })
             // TODO - Hide panels if more than 3
@@ -118,14 +118,17 @@ function myjsapp() {
                 delete chatHistory[id]
             }
         },
+        showVideoCall : function () {
+            $('#videoCallPanel').modal()
+        },
         closeVideoCall : function () {
-            
+            $('.end-call').click()
         },
         setTheirVideo : function (stream) {
             $('#their-video').prop('src', URL.createObjectURL(stream));
         },
-        setOurVideo : function (stream) {
-            $('#our-video').prop('src', URL.createObjectURL(stream));
+        setMyVideo : function (stream) {
+            $('#my-video').prop('src', URL.createObjectURL(stream));
         },
     };
 }

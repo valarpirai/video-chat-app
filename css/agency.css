@@ -203,7 +203,7 @@ section h3.section-subheading {
   box-shadow: none;
   border: none;
   min-height: 100%;
-  padding: 100px 0;
+  padding: 20px 0;
   text-align: center;
 }
 .portfolio-modal .modal-content h2 {
@@ -234,6 +234,7 @@ section h3.section-subheading {
   top: 25px;
   right: 25px;
   cursor: pointer;
+  z-index: 100;
 }
 .portfolio-modal .close-modal:hover {
   opacity: 0.3;
@@ -519,3 +520,21 @@ ul.chatHistory li {
   float: right;
   cursor: pointer;
 }
+#their-video,
+#my-video {
+  width: 320px;
+  height: 480px;
+  background-color: black;
+}
+#my-video {
+  position: absolute;
+  height: 150px;
+  width: 99px;
+  bottom: 50px;
+  right: 50px;
+  background-color: chocolate;
+}
+.hide {
+  display: none;
+}
+

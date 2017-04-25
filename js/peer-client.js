@@ -16,7 +16,7 @@
     console.log(peer)
 
     peerCallbacks(peer);
-    // initializeLocalVideo();
+    initializeLocalVideo();
 
     // Generate random ID
     function generateRandomID() {
@@ -87,10 +87,12 @@
         peer.on('connection', connect);
 
         peer.on('call', function(call) {
+        	console.log("Receiving a call")
+        	console.log(call)
             // New call requests from users
             // TODO - Confirm before accepting call
             call.answer(window.localStream);
-
+            myapp.showVideoCall()
             callConnect(call)
         });
 
@@ -149,9 +151,10 @@
 
     function initializeLocalVideo() {
 		// Get audio/video stream
-		navigator.getUserMedia({audio: true, video: true}, function(stream) {
+		navigator.getUserMedia({audio: true, video: { width: 320, height: 480 }}, function(stream) {
 			// Set your video displays
 			window.localStream = stream;
+			myapp.setMyVideo(stream)
 		}, function(err) {
 			console.log("The following error occurred: " + err.name);
 		});
@@ -159,9 +162,9 @@
 
     function makeCall(callerID) {
     	console.log("Calling..." +  callerID)
-    	if(!window.localStream) {
-    		console.log("Video permission not granted")
-    	}
+    	// if(!window.localStream) {
+    	// 	console.log("Video permission not granted")
+    	// }
     	var call = peer.call(callerID, window.localStream);
     	callConnect(call)
     }
