@@ -1,4 +1,4 @@
-// (function() {
+peerapp = (function() {
     'use strict';
 
     console.log("Peer client started");
@@ -194,4 +194,11 @@
             peer.destroy();
         }
     };
-// })();
+
+    return {
+    	makeCall : makeCall,
+    	endCall : endCall,
+    	sendMessage : sendMessage,
+    	connectToId : connectToId
+    }
+})();

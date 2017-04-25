@@ -1,5 +1,5 @@
 // UI Manager for the Chat app
-function myjsapp() {
+function myjsapp(peerClient) {
     var chatHistory = {};
     var chatPanel = {};
 
@@ -9,7 +9,7 @@ function myjsapp() {
         $('#connect-btn').click(function (event) {
             var id = $('#inputPeerUserId').val().trim();
             if(id) {
-                connectToId(id)
+                peerClient.connectToId(id)
                 $('#inputPeerUserId').val('')
             }
         });
@@ -38,7 +38,7 @@ function myjsapp() {
 
         $('.end-call').click(function (event) {
             // End established call
-            endCall();
+            peerClient.endCall();
         })
     }
 
@@ -86,7 +86,7 @@ function myjsapp() {
                 if (13 == event.which) {
                     var msgText = $(this).val().trim()
                     if(msgText) {
-                        sendMessage(toPeerId, msgText)
+                        peerClient.sendMessage(toPeerId, msgText)
                         appendToHistory(toPeerId, msgText, true)
                         $(this).val('')
                     }
@@ -96,7 +96,7 @@ function myjsapp() {
             sendBtn.click(function(event) {
                 var msgText = message.val().trim()
                 if(msgText) {
-                    sendMessage(toPeerId, msgText)
+                    peerClient.sendMessage(toPeerId, msgText)
                     appendToHistory(toPeerId, msgText, true)
                     message.val('').focus()
                 }
@@ -104,7 +104,7 @@ function myjsapp() {
 
             callButton.click(function (event) {
                 // initializeLocalVideo()
-                makeCall(toPeerId)                
+                peerClient.makeCall(toPeerId)                
             })
             // TODO - Hide panels if more than 3
         },
