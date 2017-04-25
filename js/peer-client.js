@@ -76,6 +76,7 @@
 
         peer.on('disconnected', function(conn) {
         	console.log("Peer connection disconnected");
+        	peer.reconnect()
         });
 
         peer.on('error', function(err) {
