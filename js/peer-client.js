@@ -33,7 +33,6 @@ peerapp = (function() {
         // Handle a chat connection.
         if (c.label === 'chat') {
         	// c.peer
-        	// TODO Create chat box
         	myapp.createChatWindow(c.peer)
 
             c.on('data', function(data) {
@@ -92,7 +91,7 @@ peerapp = (function() {
         	console.log("Receiving a call")
         	console.log(call)
             // New call requests from users
-            // TODO - Confirm before accepting call
+            // TODO - Ask Confirm before accepting call
             call.answer(window.localStream);
             myapp.showVideoCall()
             callConnect(call)

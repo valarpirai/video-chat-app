@@ -82,6 +82,15 @@ function myjsapp(peerClient) {
 
             $('.chat-container > div').append(panel);
 
+            $('.panel-heading', panel).click(function () {
+                var panelBody = $(".panel-body, .panel-footer", $(this).parent());
+                if(panelBody.hasClass("hide")) {
+                    panelBody.removeClass("hide")
+                } else {
+                    panelBody.addClass("hide")
+                }                
+            })
+
             message.keypress(function(event) {
                 if (13 == event.which) {
                     var msgText = $(this).val().trim()
