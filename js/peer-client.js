@@ -31,6 +31,7 @@
             c.on('data', function(data) {
                 console.log(c.peer + ' : ' + data);
                 // Append data to chat history
+            	myapp.appendHistory(c.peer, data)   
             });
 
             c.on('close', function() {
@@ -84,7 +85,7 @@
     };
 
     function connectToId(id) {
-    	if(!id)
+    	if(!id || peer.disconnected)
     		return;
     	var requestedPeer = id;
         if (!connectedPeers[requestedPeer]) {
@@ -109,12 +110,26 @@
         connectedPeers[requestedPeer] = 1;
     }
 
+    function sendMessage(peerId, msgText) {
+    	var conns = peer.connections[peerId];
+        for (var i = 0, ii = conns.length; i < ii; i += 1) {
+            var conn = conns[i];
+            if(conn.peer == peerId) {
+            	conn.send(msgText)
+            	break;
+            }
+        }
+    }
+
     function closeConnection(id) {
 		var conns = peer.connections[peerId];
         for (var i = 0, ii = conns.length; i < ii; i += 1) {
             var conn = conns[i];
-            conn.close();
-        }    	
+            if(conn.peer == id) {
+            	conn.close();
+            	break;
+            }
+        }
     }
 
 

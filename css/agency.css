@@ -494,6 +494,11 @@ ul.chatHistory {
   margin: 0;
   margin-top: 5px;
   padding: 5px;
+
+  height: 300px;
+  overflow-y: auto;
+
+  border-top: thin solid #c5adad;
 }
 ul.chatHistory li {
   padding: 0.25rem 0px;
@@ -510,7 +515,4 @@ ul.chatHistory li {
 .chat-div {
   margin-left: 10px;
   margin-right: 10px;
-}
-.chat-div .panel-body {
-  height: 300px;
 }
