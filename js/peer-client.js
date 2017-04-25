@@ -11,7 +11,7 @@
 	navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
 
     // Connect to server
-    var peer = new Peer(generateRandomID(), { host: PEER_SERVER, port: PORT, path: '/', secure: true });
+    var peer = new Peer(generateRandomID(4), { host: PEER_SERVER, port: PORT, path: '/', secure: true });
     // var peer = new Peer({ host: 'my-peer.herokuapp.com', port: '443', path: '/', secure: true });
     console.log(peer)
 
@@ -19,9 +19,11 @@
     initializeLocalVideo();
 
     // Generate random ID
-    function generateRandomID() {
-        // return Math.random().toString(36).substring(2);
-        return Math.random().toString(36).substring(8);
+    function generateRandomID(length) {
+        var chars = '123456789abcdefghijklmnopqrstuvwxyz'
+	    var result = '';
+	    for (var i = length; i > 0; --i) result += chars[Math.floor(Math.random() * chars.length)];
+	    return result;
     }
 
     // Data channel
