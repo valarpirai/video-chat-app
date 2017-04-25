@@ -1,6 +1,6 @@
-(function() {
+// (function() {
     'use strict';
-    
+
     console.log("Peer client started");
 
     var PEER_SERVER = 'my-peer.herokuapp.com';
@@ -25,13 +25,17 @@
         // Handle a chat connection.
         if (c.label === 'chat') {
         	// c.peer
+        	// TODO Create chat box
+        	myapp.createChatWindow(c.peer)
 
             c.on('data', function(data) {
                 console.log(c.peer + ' : ' + data);
+                // Append data to chat history
             });
 
             c.on('close', function() {
                 delete connectedPeers[c.peer];
+                myapp.closeChatWindow(c.peer)
             });
         } else if (c.label === 'file') {
             c.on('data', function(data) {
@@ -55,6 +59,7 @@
     function peerCallbacks(peer) {
         peer.on('open', function(id) {
             console.log('My peer ID is: ' + id);
+            myapp.setPeerId(id);
         });
 
         peer.on('connection', connect);
@@ -65,22 +70,58 @@
 
         peer.on('close', function(conn) {
             // New connection requests from users
+            console.log("Peer connection closed");
         });
 
-        peer.on('disconnected', function(conn) {});
+        peer.on('disconnected', function(conn) {
+        	console.log("Peer connection disconnected");
+        });
 
         peer.on('error', function(err) {
             console.log("Peer connection error:")
             console.log(err)
         });
+    };
 
+    function connectToId(id) {
+    	if(!id)
+    		return;
+    	var requestedPeer = id;
+        if (!connectedPeers[requestedPeer]) {
+            // Create 2 connections, one labelled chat and another labelled file.
+            var c = peer.connect(requestedPeer, {
+                label: 'chat',
+                serialization: 'none',
+                metadata: { message: 'hi i want to chat with you!' }
+            });
+            c.on('open', function() {
+                connect(c);
+            });
+            c.on('error', function(err) { alert(err); });
+
+            // File Sharing
+            var f = peer.connect(requestedPeer, { label: 'file', reliable: true });
+            f.on('open', function() {
+                connect(f);
+            });
+            f.on('error', function(err) { alert(err); });
+        }
+        connectedPeers[requestedPeer] = 1;
     }
 
-    // Make sure things clean up properly.
+    function closeConnection(id) {
+		var conns = peer.connections[peerId];
+        for (var i = 0, ii = conns.length; i < ii; i += 1) {
+            var conn = conns[i];
+            conn.close();
+        }    	
+    }
 
+
+    // Make sure things clean up properly.
     window.onunload = window.onbeforeunload = function(e) {
         if (!!peer && !peer.destroyed) {
             peer.destroy();
         }
     };
-})();
+// })();
