@@ -29,13 +29,14 @@
     	<div class="container">
     		<div class="row">
     			<div class="col-lg-6 col-md-6">
-    				Your Peer ID: <h4 id="peer-id" data-toggle="tooltip" data-placement="top" title="Click to copy peer ID"></h3>
+    				Your ID: <h4 id="peer-id" data-toggle="tooltip" data-placement="top" title="Click to copy peer ID"></h3>
+                    <a href="#getUserNameModal" data-toggle="modal">change</a>
     			</div>
     			<div class="col-lg-6 col-md-6">
     				<div class="form-inline">
 						<div class="form-group mx-sm-3">
 							<label for="inputPeerUserId" class="sr-only">Password</label>
-							<input type="text" class="form-control" id="inputPeerUserId" placeholder="Peer ID">
+							<input type="text" class="form-control" id="inputPeerUserId" placeholder="Enter your friends ID">
 						</div>
 						<button type="button" class="btn btn-outline-primary" id='connect-btn'>Connect</button>
 					</div>
@@ -80,6 +81,26 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="getUserNameModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Enter your Name</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="user-name" class="form-control-label">Your Name:</label>
+                        <input type="text" class="form-control" id="user-name">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" data-dismiss="modal" class="btn btn-primary username-done">Done</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>

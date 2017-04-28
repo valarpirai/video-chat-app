@@ -13,15 +13,16 @@ peerapp = (function() {
     navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
 
     // Connect to server
-    function connectToServer() {
+    function connectToServerWithId(peerId) {
+        myPeerID = peerId || myPeerID;
         peer = new Peer(myPeerID, { host: PEER_SERVER, port: PORT, path: '/', secure: true });  
         peerCallbacks(peer);
     }    
     // var peer = new Peer({ host: 'my-peer.herokuapp.com', port: '443', path: '/', secure: true });
-    connectToServer();
+    // connectToServerWithId(myPeerID);
     console.log(peer)
 
-    initializeLocalMedia({'audio' : true});
+    initializeLocalMedia({'audio': true, 'video': true});
 
     // Generate random ID
     function generateRandomID(length) {
@@ -118,7 +119,7 @@ peerapp = (function() {
             console.log("Peer connection disconnected");
             console.log(new Date());
             setTimeout(function () {
-                connectToServer();  
+                connectToServerWithId();  
             }, 3000);
             
             // peer.reconnect()
@@ -128,6 +129,10 @@ peerapp = (function() {
             console.log(new Date());
             console.log("Peer connection error:")
             console.log(err)
+            if("unavailable-id" == err.type) {
+                // ID Already taken, so assigning random ID
+                myPeerID = generateRandomID(4);
+            }
         });
     };
 
@@ -227,6 +232,7 @@ peerapp = (function() {
         makeCall : makeCall,
         endCall : endCall,
         sendMessage : sendMessage,
-        connectToId : connectToId
+        connectToId : connectToId,
+        connectToServerWithId : connectToServerWithId
     }
 })();
