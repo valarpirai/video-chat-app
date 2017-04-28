@@ -6,16 +6,21 @@ peerapp = (function() {
     var PEER_SERVER = 'my-peer.herokuapp.com';
     var PORT = 443;
     var connectedPeers = {};
+    var myPeerID = generateRandomID(4);
+    var peer;
 
     // Compatibility shim
 	navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
 
     // Connect to server
-    var peer = new Peer(generateRandomID(4), { host: PEER_SERVER, port: PORT, path: '/', secure: true });
+    function connectToServer() {
+    	peer = new Peer(myPeerID, { host: PEER_SERVER, port: PORT, path: '/', secure: true });	
+    	peerCallbacks(peer);
+    }    
     // var peer = new Peer({ host: 'my-peer.herokuapp.com', port: '443', path: '/', secure: true });
+    connectToServer();
     console.log(peer)
 
-    peerCallbacks(peer);
     initializeLocalVideo();
 
     // Generate random ID
@@ -45,6 +50,7 @@ peerapp = (function() {
                 delete connectedPeers[c.peer];
                 myapp.closeChatWindow(c.peer)
             });
+            connectedPeers[c.peer] = c;
         } else if (c.label === 'file') {
             c.on('data', function(data) {
                 // If we're getting a file, create a URL for it.
@@ -57,7 +63,6 @@ peerapp = (function() {
                 }
             });
         }
-        connectedPeers[c.peer] = 1;
     }
 
     function callConnect(call) {
@@ -82,6 +87,7 @@ peerapp = (function() {
     function peerCallbacks(peer) {
         peer.on('open', function(id) {
             console.log('My peer ID is: ' + id);
+            console.log(new Date());
             myapp.setPeerId(id);
         });
 
@@ -104,10 +110,13 @@ peerapp = (function() {
 
         peer.on('disconnected', function(conn) {
         	console.log("Peer connection disconnected");
+        	console.log(new Date());
+        	connectToServer();
         	// peer.reconnect()
         });
 
         peer.on('error', function(err) {
+        	console.log(new Date());
             console.log("Peer connection error:")
             console.log(err)
         });
@@ -136,17 +145,13 @@ peerapp = (function() {
             });
             f.on('error', function(err) { alert(err); });
         }
-        connectedPeers[requestedPeer] = 1;
     }
 
     function sendMessage(peerId, msgText) {
-    	var conns = peer.connections[peerId];
-        for (var i = 0, ii = conns.length; i < ii; i += 1) {
-            var conn = conns[i];
-            if(conn.peer == peerId) {
-            	conn.send(msgText)
-            	break;
-            }
+    	
+        if(connectedPeers[peerId]) {
+        	var conn = connectedPeers[peerId]
+           	conn.send(msgText)
         }
     }
 
@@ -161,13 +166,22 @@ peerapp = (function() {
 		});
     }
 
-    function makeCall(callerID) {
+    function makeCall(callerID, isVideoCall) {
     	console.log("Calling..." +  callerID)
-    	// if(!window.localStream) {
-    	// 	console.log("Video permission not granted")
-    	// }
-    	var call = peer.call(callerID, window.localStream);
-    	callConnect(call)
+    	
+    	var options = {audio: true};
+    	if(isVideoCall)
+    		options['video'] = true;
+    	navigator.getUserMedia(options, function(stream) {
+			// Set your video displays
+			window.localStream = stream;
+			myapp.setMyVideo(stream)
+			var call = peer.call(callerID, window.localStream);
+    		callConnect(call)
+		}, function(err) {
+			console.log("The following error occurred: " + err.name);
+			alert('Unable to call ' + err.name)
+		});
     }
 
     function endCall() {
@@ -177,12 +191,9 @@ peerapp = (function() {
 
     function closeConnection(id) {
 		var conns = peer.connections[peerId];
-        for (var i = 0, ii = conns.length; i < ii; i += 1) {
-            var conn = conns[i];
-            if(conn.peer == id) {
-            	conn.close();
-            	break;
-            }
+        if(connectedPeers[peerId]) {
+        	var conn = connectedPeers[peerId]
+           	conn.send(msgText)
         }
     }
 

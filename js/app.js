@@ -70,8 +70,11 @@ function myjsapp(peerClient) {
             var history = $('<ul class="chatHistory"></ul>')
             var message = $('<input type="text" class="form-control" placeholder="Enter Message">')
             var sendBtn = $('<button type="button" class="btn btn-outline-primary">Send</button>')
-            var callButton = $('<a href="#videoCallPanel" class="portfolio-link" data-toggle="modal">' +
-                    '<i class="fa fa-phone fa-2x call-icon" aria-hidden="true"></i></a>')
+            var callButton = $('<a href="#videoCallPanel" class="portfolio-link" data-toggle="modal">');
+            var videoCall = $('<i class="fa fa-video-camera fa-2x call-icon" aria-hidden="true"></i>');
+            var audioCall = $('<i class="fa fa-phone fa-2x call-icon" aria-hidden="true"></i></a>');
+
+            callButton.append(audioCall).append(videoCall);
 
             chatHistory[toPeerId] = history
             chatPanel[toPeerId] = panel
@@ -111,9 +114,15 @@ function myjsapp(peerClient) {
                 }
             });
 
-            callButton.click(function (event) {
+            audioCall.click(function (event) {
                 // initializeLocalVideo()
-                peerClient.makeCall(toPeerId)                
+                var isVideoCall = false;
+                peerClient.makeCall(toPeerId, isVideoCall);
+            })
+            videoCall.click(function (event) {
+                // initializeLocalVideo()
+                var isVideoCall = true;
+                peerClient.makeCall(toPeerId, isVideoCall);
             })
             // TODO - Hide panels if more than 3
         },
