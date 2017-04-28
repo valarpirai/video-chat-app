@@ -73,7 +73,8 @@ function myjsapp(peerClient) {
 
         $('.username-done').click(function (event) {
             var username = $('#user-name').val().trim();
-            startPeerClient(username)
+            if(cookie.get('username') != username)
+                startPeerClient(username)
         })
     }
 
@@ -96,6 +97,7 @@ function myjsapp(peerClient) {
     // Show Username Modal
     var username = cookie.get('username');
     if(username) {
+        $('#user-name').val(username)
         startPeerClient(username)
     } else {
         $('#getUserNameModal').modal()
@@ -206,6 +208,9 @@ function myjsapp(peerClient) {
         setMyVideo : function (stream) {
             $('#my-video').prop('src', URL.createObjectURL(stream));
         },
+        showError : function (msg) {
+            
+        }
     };
 }
 

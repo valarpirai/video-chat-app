@@ -8,6 +8,7 @@ peerapp = (function() {
     var connectedPeers = {};
     var myPeerID = generateRandomID(4);
     var peer;
+    var peerIdAlreadyTakenCount = 3;
 
     // Compatibility shim
     navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
@@ -15,6 +16,9 @@ peerapp = (function() {
     // Connect to server
     function connectToServerWithId(peerId) {
         myPeerID = peerId || myPeerID;
+        if(peer && peer.disconnected == false) {
+            peer.disconnect()
+        }
         peer = new Peer(myPeerID, { host: PEER_SERVER, port: PORT, path: '/', secure: true });  
         peerCallbacks(peer);
     }    
@@ -33,7 +37,7 @@ peerapp = (function() {
     }
 
     // Data channel
-    // Handle a connection object.
+    // Handle a Text and File connection objects
     function connect(c) {
         console.log(c)
         // Handle a chat connection.
@@ -66,6 +70,7 @@ peerapp = (function() {
         }
     }
 
+    // Handle Audio and Video Calls
     function callConnect(call) {
         
         // Hang up on an existing call if present
@@ -116,11 +121,14 @@ peerapp = (function() {
         });
 
         peer.on('disconnected', function(conn) {
-            console.log("Peer connection disconnected");
+            console.log("Peer connection disconnected : " + conn);
             console.log(new Date());
+            if(conn != myPeerID) {
+                return
+            }            
             setTimeout(function () {
-                connectToServerWithId();  
-            }, 3000);
+                connectToServerWithId();
+            }, 5000);
             
             // peer.reconnect()
         });
@@ -130,8 +138,14 @@ peerapp = (function() {
             console.log("Peer connection error:")
             console.log(err)
             if("unavailable-id" == err.type) {
-                // ID Already taken, so assigning random ID
-                myPeerID = generateRandomID(4);
+                // ID Already taken, so assigning random ID after 3 attempts
+                peerIdAlreadyTakenCount++;
+                if(peerIdAlreadyTakenCount >= 3) {
+                    peerIdAlreadyTakenCount = 0;
+                    myPeerID = generateRandomID(4);
+                }
+            } else if ("peer-unavailable" == err.type) {
+                myapp.showError(err.message)
             }
         });
     };
@@ -153,11 +167,11 @@ peerapp = (function() {
             c.on('error', function(err) { alert(err); });
 
             // File Sharing
-            var f = peer.connect(requestedPeer, { label: 'file', reliable: true });
-            f.on('open', function() {
-                connect(f);
-            });
-            f.on('error', function(err) { alert(err); });
+            // var f = peer.connect(requestedPeer, { label: 'file', reliable: true });
+            // f.on('open', function() {
+            //     connect(f);
+            // });
+            // f.on('error', function(err) { alert(err); });
         }
     }
 
