@@ -517,9 +517,13 @@ ul.chatHistory li {
   margin-left: 10px;
   margin-right: 10px;
 }
+.chat-div.min {
+  height: 40px;
+}
 .call-icon {
   float: right;
   cursor: pointer;
+  margin-left: 10px;
 }
 #their-video,
 #my-video {

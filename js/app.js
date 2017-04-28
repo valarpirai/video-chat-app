@@ -70,7 +70,7 @@ function myjsapp(peerClient) {
             var history = $('<ul class="chatHistory"></ul>')
             var message = $('<input type="text" class="form-control" placeholder="Enter Message">')
             var sendBtn = $('<button type="button" class="btn btn-outline-primary">Send</button>')
-            var callButton = $('<a href="#videoCallPanel" class="portfolio-link" data-toggle="modal">');
+            var callButton = $('<a class="portfolio-link">');
             var videoCall = $('<i class="fa fa-video-camera fa-2x call-icon" aria-hidden="true"></i>');
             var audioCall = $('<i class="fa fa-phone fa-2x call-icon" aria-hidden="true"></i></a>');
 
@@ -89,7 +89,9 @@ function myjsapp(peerClient) {
                 var panelBody = $(".panel-body, .panel-footer", $(this).parent());
                 if(panelBody.hasClass("hide")) {
                     panelBody.removeClass("hide")
+                    panel.removeClass('min')
                 } else {
+                    panel.addClass('min')
                     panelBody.addClass("hide")
                 }                
             })
@@ -118,11 +120,13 @@ function myjsapp(peerClient) {
                 // initializeLocalVideo()
                 var isVideoCall = false;
                 peerClient.makeCall(toPeerId, isVideoCall);
+                return false
             })
             videoCall.click(function (event) {
                 // initializeLocalVideo()
                 var isVideoCall = true;
                 peerClient.makeCall(toPeerId, isVideoCall);
+                return false
             })
             // TODO - Hide panels if more than 3
         },
@@ -136,8 +140,12 @@ function myjsapp(peerClient) {
                 delete chatHistory[id]
             }
         },
-        showVideoCall : function () {
+        showVideoCall : function (options) {
             $('#videoCallPanel').modal()
+            if(options['video'])
+                $('#videoCallPanel .title').text('Video Call')
+            else
+                $('#videoCallPanel .title').text('Voice Call')
         },
         closeVideoCall : function () {
             $('.end-call').click()
