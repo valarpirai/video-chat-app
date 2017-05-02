@@ -159,7 +159,8 @@ peerapp = (function() {
             var c = peer.connect(requestedPeer, {
                 label: 'chat',
                 serialization: 'none',
-                metadata: { message: 'hi i want to chat with you!' }
+                metadata: { message: 'hi i want to chat with you!' },
+                reliable: true
             });
             c.on('open', function() {
                 connect(c);
