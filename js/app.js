@@ -39,7 +39,7 @@ function myjsapp(peerClient) {
         $('#connect-btn').click(function (event) {
             var id = $('#inputPeerUserId').val().trim();
             if(id) {
-                peerClient.connectToId(id)
+                peerClient.connectToId(id.toLowerCase())
                 $('#inputPeerUserId').val('')
             }
         });
