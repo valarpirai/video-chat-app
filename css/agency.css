@@ -535,11 +535,19 @@ ul.chatHistory li {
   position: absolute;
   height: 150px;
   width: 99px;
-  bottom: 50px;
-  right: 50px;
+  bottom: 30px;
+  left: calc(50% + 150px);
   background-color: chocolate;
+}
+@media (max-width: 550px) {
+  #my-video {
+    left: calc(50% + 61px);
+  }
 }
 .hide {
   display: none;
+}
+#videoCallPanel .modal-content {
+  width: 100vw;
 }
 
