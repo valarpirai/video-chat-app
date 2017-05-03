@@ -36,11 +36,20 @@ function myjsapp(peerClient) {
     function EventListeners() {
         $('#peer-id').tooltip()
 
-        $('#connect-btn').click(function (event) {
+        function connectToPeer() {
             var id = $('#inputPeerUserId').val().trim();
             if(id) {
                 peerClient.connectToId(id.toLowerCase())
                 $('#inputPeerUserId').val('')
+            }
+        }
+        $('#connect-btn').click(function (event) {
+            connectToPeer()
+        });
+
+        $('#inputPeerUserId').keypress(function(event) {
+            if (13 == event.which) {
+                connectToPeer()
             }
         });
 
