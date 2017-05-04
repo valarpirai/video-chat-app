@@ -53,7 +53,7 @@
     <!-- Portfolio Modals -->
     <!-- Use the modals below to showcase details about your portfolio projects! -->
     <!-- Portfolio Modal 1 -->
-    <div class="portfolio-modal modal fade" id="videoCallPanel" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="portfolio-modal modal" id="videoCallPanel" tabindex="-1" role="dialog" data-keyboard="false" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="close-modal end-call hide" data-dismiss="modal">
@@ -82,7 +82,7 @@
         </div>
     </div>
 
-    <div class="modal fade" id="getUserNameModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal" id="getUserNameModal" tabindex="-1" role="dialog" data-keyboard="false" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop='static'>
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -90,12 +90,28 @@
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="user-name" class="form-control-label">Your Name:</label>
                         <input type="text" class="form-control" id="user-name">
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" data-dismiss="modal" class="btn btn-primary username-done">Done</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal" id="callConfirmationModal" tabindex="-1" role="dialog" data-keyboard="false" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop='static'>
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title peer-name"></h5>
+                </div>
+                <div class="modal-body">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger reject-call" data-dismiss="modal">Reject</button>
+                    <button type="button" class="btn btn-primary accept-call" data-dismiss="modal">Accept</button>
                 </div>
             </div>
         </div>

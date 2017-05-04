@@ -85,6 +85,16 @@ function myjsapp(peerClient) {
             if(cookie.get('username') != username)
                 startPeerClient(username)
         })
+
+        
+        $('.accept-call').click(function (event) {
+            // End established call
+            peerClient.acceptIncomingCall();
+        })
+        $('.reject-call').click(function (event) {
+            // End established call
+            peerClient.rejectIncomingCall();
+        })
     }
 
     function appendToHistory(id, message, isSent) {
@@ -109,7 +119,7 @@ function myjsapp(peerClient) {
         $('#user-name').val(username)
         startPeerClient(username)
     } else {
-        $('#getUserNameModal').modal()
+        $('#getUserNameModal').modal('show')
     }
 
     EventListeners();        
@@ -202,11 +212,19 @@ function myjsapp(peerClient) {
             }
         },
         showVideoCall : function (options) {
-            $('#videoCallPanel').modal()
+            $('#videoCallPanel').modal('show')
             if(options['video'])
                 $('#videoCallPanel .title').text('Video Call')
             else
                 $('#videoCallPanel .title').text('Voice Call')
+        },
+        showIncomingCall : function (peerId, options) {
+            $('#callConfirmationModal').modal('show')
+            if(options['video'])
+                var txt = "Incoming Video call from : " + peerId
+            else
+                var txt = "Incoming Voice call from : " + peerId
+            $('#callConfirmationModal .peer-name').text(txt)
         },
         closeVideoCall : function () {
             $('.end-call').click()

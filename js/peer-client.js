@@ -87,6 +87,7 @@ peerapp = (function() {
         // UI stuff
         window.existingCall = call;
         call.on('close', function() {
+            console.log("Call Ending")
             myapp.closeVideoCall()
         });
     }
@@ -104,16 +105,18 @@ peerapp = (function() {
             console.log("Receiving a call")
             console.log(call)
             // New call requests from users
-            // TODO - Ask Confirm before accepting call
-            
-            var metadata = call.options.metadata;
-            console.log(metadata);
-
-            initializeLocalMedia(metadata, function() {
-                call.answer(window.localStream);
-                myapp.showVideoCall(metadata);
-                callConnect(call)
-            });
+            // Ask Confirm before accepting call
+            // if(window.incomingCall) {
+            //     window.incomingCall.answer()
+            //     setTimeout(function () {
+            //         window.incomingCall.close();
+            //         window.incomingCall = call
+            //         myapp.showIncomingCall(call.peer);
+            //     }, 1000)
+            // } else {
+                window.incomingCall = call
+                myapp.showIncomingCall(call.peer, call.options.metadata);
+            // }
         });
 
         peer.on('close', function(conn) {
@@ -222,6 +225,29 @@ peerapp = (function() {
         });
     }
 
+    function acceptIncomingCall() {
+        var call = window.incomingCall;
+        var metadata = call.options.metadata;
+        console.log(metadata);
+
+        initializeLocalMedia(metadata, function() {
+            call.answer(window.localStream);
+            myapp.showVideoCall(metadata);
+            callConnect(call)
+        });
+    }
+
+    function rejectIncomingCall() {
+        var call = window.incomingCall;
+        var metadata = call.options.metadata;
+        console.log(metadata);
+        console.log("Rejecting incomingCall")
+        call.answer();
+        setTimeout(function () {
+            call.close();  
+        }, 1000)
+    }
+
     function endCall() {
         if(window.existingCall)
             window.existingCall.close();
@@ -248,6 +274,8 @@ peerapp = (function() {
         endCall : endCall,
         sendMessage : sendMessage,
         connectToId : connectToId,
-        connectToServerWithId : connectToServerWithId
+        connectToServerWithId : connectToServerWithId,
+        acceptIncomingCall : acceptIncomingCall,
+        rejectIncomingCall : rejectIncomingCall
     }
 })();
