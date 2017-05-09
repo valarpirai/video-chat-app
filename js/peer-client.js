@@ -114,8 +114,13 @@ peerapp = (function() {
             //         myapp.showIncomingCall(call.peer);
             //     }, 1000)
             // } else {
+            if(window.existingCall) {
+                // If already in a call, rejecting the new calls
+                rejectIncomingCall(call)
+            } else {
                 window.incomingCall = call
                 myapp.showIncomingCall(call.peer, call.options.metadata);
+            }
             // }
         });
 
@@ -237,8 +242,8 @@ peerapp = (function() {
         });
     }
 
-    function rejectIncomingCall() {
-        var call = window.incomingCall;
+    function rejectIncomingCall(reCall) {
+        var call = reCall || window.incomingCall;
         var metadata = call.options.metadata;
         console.log(metadata);
         console.log("Rejecting incomingCall")
@@ -251,6 +256,7 @@ peerapp = (function() {
     function endCall() {
         if(window.existingCall)
             window.existingCall.close();
+        window.existingCall = null
     }
 
     function closeConnection(id) {
