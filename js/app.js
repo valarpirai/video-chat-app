@@ -53,7 +53,6 @@ function myjsapp(peerClient) {
             }
         });
 
-        
         $(document).on('click', '.peeruser', function() {
             var id = $(this).text()
             $('#inputPeerUserId').val(id)
@@ -248,6 +247,11 @@ function myjsapp(peerClient) {
         updateOnlieUsers : function (users) {
             var list = $('.onlinepeers')
             list.empty()
+            if(users.length == 0) {
+                var usr = '<li>Looks like no one is online</li>'
+                list.append(usr);
+                return
+            }
             for (var i = 0; i < users.length; i++) {
                 var usr = '<li class="peeruser">'+ users[i] + '</li>'
                 list.append(usr);
