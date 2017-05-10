@@ -43,7 +43,7 @@ h4,
 h5,
 h6 {
   font-family: "Montserrat", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-weight: 700;
+  font-weight: 300;
   display: initial;
 }
 header {
@@ -550,4 +550,6 @@ ul.chatHistory li {
 #videoCallPanel .modal-content {
   width: 100vw;
 }
-
+.peeruser {
+  cursor: pointer;
+}

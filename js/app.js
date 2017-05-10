@@ -53,6 +53,13 @@ function myjsapp(peerClient) {
             }
         });
 
+        
+        $(document).on('click', '.peeruser', function() {
+            var id = $(this).text()
+            $('#inputPeerUserId').val(id)
+            connectToPeer()
+        });
+
         Element.prototype.remove = function() {
             this.parentElement.removeChild(this);
         }
@@ -237,6 +244,14 @@ function myjsapp(peerClient) {
         },
         showError : function (msg) {
             
+        },
+        updateOnlieUsers : function (users) {
+            var list = $('.onlinepeers')
+            list.empty()
+            for (var i = 0; i < users.length; i++) {
+                var usr = '<li class="peeruser">'+ users[i] + '</li>'
+                list.append(usr);
+            }
         }
     };
 }

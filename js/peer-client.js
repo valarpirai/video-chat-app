@@ -97,6 +97,7 @@ peerapp = (function() {
             console.log('My peer ID is: ' + id);
             console.log(new Date());
             myapp.setPeerId(id);
+            fetchOnlinePeers();
         });
 
         peer.on('connection', connect);
@@ -267,13 +268,28 @@ peerapp = (function() {
         }
     }
 
-
     // Make sure things clean up properly.
     window.onunload = window.onbeforeunload = function(e) {
         if (!!peer && !peer.destroyed) {
             peer.destroy();
         }
     };
+
+    function fetchOnlinePeers() {
+        $.ajax("https://" + PEER_SERVER + "/peerjs/" + myPeerID + "/onlineusers")
+        .done(function( data ) {
+            // console.log(data);
+            if(data.msg == 'Success') {
+                data.users.splice(data.users.indexOf(myPeerID), 1)
+                myapp.updateOnlieUsers(data.users)
+            }
+        });
+    }
+
+    // Update Online users on every 5 seconds
+    setInterval(function () {
+        fetchOnlinePeers()
+    }, 5000)
 
     return {
         makeCall : makeCall,
