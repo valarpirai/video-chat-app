@@ -82,6 +82,8 @@ function myjsapp(peerClient) {
         });
 
         $('.end-call').click(function (event) {
+            // clear CSS for mute buttons
+            $('.mute-audio, .mute-video').removeClass('btn-success').addClass('btn-secondary')
             // End established call
             peerClient.endCall();
         })
