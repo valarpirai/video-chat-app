@@ -208,7 +208,7 @@ peerapp = (function() {
         navigator.getUserMedia(options, function(stream) {
             // Set your video displays
             window.localStream = stream;
-            myapp.setMyVideo(stream)
+            myapp.setMyVideo(window.localStream)
             if(callback)
                 callback();
         }, function(err) {
@@ -260,6 +260,30 @@ peerapp = (function() {
         window.existingCall = null
     }
 
+    function muteAudio(status) {
+        if(status == false)
+            status = false
+        else 
+            status = true
+        if(window.localStream) {
+            var audioTracks = window.localStream.getAudioTracks()
+            if(audioTracks && audioTracks[0])
+                audioTracks[0].enabled = status;
+        }
+    }
+
+    function muteVideo(status) {
+        if(status == false)
+            status = false
+        else 
+            status = true
+        if(window.localStream) {
+            var videoTracks = window.localStream.getVideoTracks()
+            if(videoTracks && videoTracks[0])
+                videoTracks[0].enabled = status;
+        }
+    }
+
     function closeConnection(id) {
         var conns = peer.connections[peerId];
         if(connectedPeers[peerId]) {
@@ -298,6 +322,8 @@ peerapp = (function() {
         connectToId : connectToId,
         connectToServerWithId : connectToServerWithId,
         acceptIncomingCall : acceptIncomingCall,
-        rejectIncomingCall : rejectIncomingCall
+        rejectIncomingCall : rejectIncomingCall,
+        muteAudio : muteAudio,
+        muteVideo : muteVideo
     }
 })();
