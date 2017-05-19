@@ -86,6 +86,15 @@ function myjsapp(peerClient) {
             peerClient.endCall();
         })
 
+        $('#user-name').keypress(function (event) {
+            if (13 == event.which) {
+                var username = $('#user-name').val().trim();
+                $('#getUserNameModal').modal('hide')
+                if(cookie.get('username') != username)
+                    startPeerClient(username)
+            }
+        })
+
         $('.username-done').click(function (event) {
             var username = $('#user-name').val().trim();
             if(cookie.get('username') != username)
@@ -100,6 +109,27 @@ function myjsapp(peerClient) {
         $('.reject-call').click(function (event) {
             // End established call
             peerClient.rejectIncomingCall();
+        })
+
+        $('.mute-audio').click(function (event) {
+            if($(this).hasClass('btn-secondary')) {
+                $(this).removeClass('btn-secondary').addClass('btn-success')
+                // End established call
+                peerClient.muteAudio(false);
+            } else {
+                $(this).removeClass('btn-success').addClass('btn-secondary')
+                peerClient.muteAudio(true);
+            }
+        })
+        $('.mute-video').click(function (event) {
+            if($(this).hasClass('btn-secondary')) {
+                $(this).removeClass('btn-secondary').addClass('btn-success')
+                // End established call
+                peerClient.muteVideo(false);
+            } else {
+                $(this).removeClass('btn-success').addClass('btn-secondary')
+                peerClient.muteVideo(true);
+            }
         })
     }
 
