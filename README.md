@@ -11,7 +11,7 @@ https://valarpirai.github.io/video-chat-app/
 * Peer to Peer voice and video calls
 
 ### Server
-* PeerJS Server [Github Source](https://github.com/peers/peerjs-server)
+* PeerJS Server [Github Source](https://github.com/valarpirai/peerjs-server)
 * Google STUN Server
 * PeerJS Server hosted on [Heroku](https://my-peer.herokuapp.com)
 
