@@ -268,10 +268,21 @@ function myjsapp(peerClient) {
             $('.end-call').click()
         },
         setTheirVideo : function (stream) {
-            $('#their-video').prop('src', URL.createObjectURL(stream));
+            var video = document.getElementById('their-video');
+            if (typeof video.srcObject == "object") {
+                video.srcObject = stream;
+            } else {
+                video.src = URL.createObjectURL(stream);
+            }
         },
         setMyVideo : function (stream) {
-            $('#my-video').prop('src', URL.createObjectURL(stream));
+            // $('#my-video').prop('src', stream);
+            var video = document.getElementById('my-video');
+            if (typeof video.srcObject == "object") {
+                video.srcObject = stream;
+            } else {
+                video.src = URL.createObjectURL(stream);
+            }
         },
         showError : function (msg) {
             
