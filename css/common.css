@@ -17,14 +17,7 @@ p {
   font-size: 14px;
   line-height: 1.75;
 }
-p.large {
-  font-size: 16px;
-}
-a,
-a:hover,
-a:focus,
-a:active,
-a.active {
+* {
   outline: none;
 }
 a {
@@ -42,61 +35,14 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: "Montserrat", "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-weight: 300;
   display: initial;
 }
-header {
-  text-align: center;
-  color: #9e79e0;
-  position: fixed;
-  height: 100vh;
-  width: 100vw;
-  top: 0;
-  left: 0;
-}
-header .intro-text {
-  padding-top: 100px;
-  padding-bottom: 50px;
-}
-header .intro-text .intro-lead-in {
-  font-family: "Droid Serif", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-style: italic;
-  font-size: 22px;
-  line-height: 22px;
-  margin-bottom: 25px;
-}
-header .intro-text .intro-heading {
-  font-family: "Montserrat", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  text-transform: uppercase;
-  font-weight: 700;
-  font-size: 50px;
-  line-height: 50px;
-  margin-bottom: 25px;
-}
-@media (min-width: 768px) {
-  header .intro-text {
-    padding-top: 300px;
-    padding-bottom: 200px;
-  }
-  header .intro-text .intro-lead-in {
-    font-family: "Droid Serif", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-style: italic;
-    font-size: 40px;
-    line-height: 40px;
-    margin-bottom: 25px;
-  }
-  header .intro-text .intro-heading {
-    font-family: "Montserrat", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    text-transform: uppercase;
-    font-weight: 700;
-    font-size: 75px;
-    line-height: 75px;
-    margin-bottom: 50px;
-  }
-}
+
 section {
   padding: 100px 0;
+  height: 100vh;
+  background: url(/img/bg.png);
 }
 section h2.section-heading {
   font-size: 40px;
@@ -105,7 +51,6 @@ section h2.section-heading {
 }
 section h3.section-subheading {
   font-size: 16px;
-  font-family: "Droid Serif", "Helvetica Neue", Helvetica, Arial, sans-serif;
   text-transform: none;
   font-style: italic;
   font-weight: 400;
@@ -116,155 +61,11 @@ section h3.section-subheading {
     padding: 150px 0;
   }
 }
-.service-heading {
-  margin: 15px 0;
-  text-transform: none;
-}
-#portfolio .portfolio-item {
-  margin: 0 0 15px;
-  right: 0;
-}
-#portfolio .portfolio-item .portfolio-link {
-  display: block;
-  position: relative;
-  max-width: 400px;
-  margin: 0 auto;
-}
-#portfolio .portfolio-item .portfolio-link .portfolio-hover {
-  background: rgba(254, 209, 54, 0.9);
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  opacity: 0;
-  transition: all ease 0.5s;
-  -webkit-transition: all ease 0.5s;
-  -moz-transition: all ease 0.5s;
-}
-#portfolio .portfolio-item .portfolio-link .portfolio-hover:hover {
-  opacity: 1;
-}
-#portfolio .portfolio-item .portfolio-link .portfolio-hover .portfolio-hover-content {
-  position: absolute;
-  width: 100%;
-  height: 20px;
-  font-size: 20px;
-  text-align: center;
-  top: 50%;
-  margin-top: -12px;
-  color: white;
-}
-#portfolio .portfolio-item .portfolio-link .portfolio-hover .portfolio-hover-content i {
-  margin-top: -12px;
-}
-#portfolio .portfolio-item .portfolio-link .portfolio-hover .portfolio-hover-content h3,
-#portfolio .portfolio-item .portfolio-link .portfolio-hover .portfolio-hover-content h4 {
-  margin: 0;
-}
-#portfolio .portfolio-item .portfolio-caption {
-  max-width: 400px;
-  margin: 0 auto;
-  background-color: white;
-  text-align: center;
-  padding: 25px;
-}
-#portfolio .portfolio-item .portfolio-caption h4 {
-  text-transform: none;
-  margin: 0;
-}
-#portfolio .portfolio-item .portfolio-caption p {
-  font-family: "Droid Serif", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-style: italic;
-  font-size: 16px;
-  margin: 0;
-}
-#portfolio * {
-  z-index: 2;
-}
-@media (min-width: 767px) {
-  #portfolio .portfolio-item {
-    margin: 0 0 30px;
-  }
-}
 .btn:focus,
 .btn:active,
 .btn.active,
 .btn:active:focus {
   outline: none;
-}
-.portfolio-modal .modal-dialog {
-  margin: 0;
-  height: 100%;
-  width: auto;
-}
-.portfolio-modal .modal-content {
-  border-radius: 0;
-  background-clip: border-box;
-  -webkit-box-shadow: none;
-  box-shadow: none;
-  border: none;
-  min-height: 100%;
-  padding: 20px 0;
-  text-align: center;
-}
-.portfolio-modal .modal-content h2 {
-  margin-bottom: 15px;
-  font-size: 3em;
-}
-.portfolio-modal .modal-content p {
-  margin-bottom: 30px;
-}
-.portfolio-modal .modal-content p.item-intro {
-  margin: 20px 0 30px;
-  font-family: "Droid Serif", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-style: italic;
-  font-size: 16px;
-}
-.portfolio-modal .modal-content ul.list-inline {
-  margin-bottom: 30px;
-  margin-top: 0;
-}
-.portfolio-modal .modal-content img {
-  margin-bottom: 30px;
-}
-.portfolio-modal .close-modal {
-  position: absolute;
-  width: 75px;
-  height: 75px;
-  background-color: transparent;
-  top: 25px;
-  right: 25px;
-  cursor: pointer;
-  z-index: 100;
-}
-.portfolio-modal .close-modal:hover {
-  opacity: 0.3;
-}
-.portfolio-modal .close-modal .lr {
-  height: 75px;
-  width: 1px;
-  margin-left: 35px;
-  background-color: #222222;
-  transform: rotate(45deg);
-  -ms-transform: rotate(45deg);
-  /* IE 9 */
-  -webkit-transform: rotate(45deg);
-  /* Safari and Chrome */
-  z-index: 1051;
-}
-.portfolio-modal .close-modal .lr .rl {
-  height: 75px;
-  width: 1px;
-  background-color: #222222;
-  transform: rotate(90deg);
-  -ms-transform: rotate(90deg);
-  /* IE 9 */
-  -webkit-transform: rotate(90deg);
-  /* Safari and Chrome */
-  z-index: 1052;
-}
-.portfolio-modal .modal-backdrop {
-  opacity: 0;
-  display: none;
 }
 ::-moz-selection {
   text-shadow: none;
@@ -301,6 +102,7 @@ body {
   border-bottom: 1px solid transparent;
   border-top-left-radius: 3px;
   border-top-right-radius: 3px;
+  cursor: pointer;
 }
 .panel-heading > .dropdown .dropdown-toggle {
   color: inherit;
@@ -525,6 +327,7 @@ ul.chatHistory li {
   float: right;
   cursor: pointer;
   margin-left: 10px;
+  font-size: 1.5rem;
 }
 #their-video,
 #my-video {
@@ -550,8 +353,16 @@ ul.chatHistory li {
   display: none;
 }
 #videoCallPanel .modal-content {
-  width: 100vw;
+  width: 50vw;
+  margin-left: auto;
+  margin-right: auto;
 }
 .peeruser {
   cursor: pointer;
+}
+.video-call-action button {
+  width: 150px;;
+}
+[type="button"] span {
+  margin-left: 5%;
 }

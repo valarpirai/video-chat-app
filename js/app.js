@@ -3,38 +3,10 @@ function myjsapp(peerClient) {
     var chatHistory = {};
     var chatPanel = {};
 
-    var cookie = {
-        // Read cookie
-        get : function getCookie (name) {
-            var cookies = {};
-            var c = document.cookie.split('; ');
-            for (i = c.length - 1; i >= 0; i--) {
-                var C = c[i].split('=');
-                cookies[C[0]] = C[1];
-            }
-            return cookies[name] || null;
-        },
-
-        // create cookie
-        set : function createCookie (name, value, minutes) {
-            if (minutes) {
-                var date = new Date();
-                date.setTime(date.getTime() + (minutes * 60 * 1000));
-                var expires = "; expires=" + date.toGMTString();
-            } else
-                var expires = "";
-            document.cookie = name + "=" + value + expires + "; path=/";
-        },
-
-        remove : function deleteCookie (name) {
-            var date = new Date();
-            date.setTime(date.getTime() - 60 * 1000);
-            document.cookie = name + "=; expires=" + date.toGMTString() + "; path=/";
-        }
-    };
+    var cookie = cookieUtil();
 
     function EventListeners() {
-        $('#peer-id').tooltip()
+        $('#peer-id').tooltip();
 
         function connectToPeer() {
             var id = $('#inputPeerUserId').val().trim();
@@ -160,16 +132,26 @@ function myjsapp(peerClient) {
         $('#getUserNameModal').modal('show')
     }
 
+    $('#videoCallPanel').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget) // Button that triggered the modal
+        var recipient = button.data('whatever') // Extract info from data-* attributes
+        // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+        // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+        var modal = $(this)
+        modal.find('.modal-title').text('New message to ' + recipient)
+        modal.find('.modal-body input').val(recipient)
+      })
+
     EventListeners();        
 
-    return {
-        setPeerId : function (id) {
-            $('#peer-id').text(id);
+    var chat_app = {
+        setPeerId : function (options) {
+            $('#peer-id').text(options.peerId);
         },
 
-        createChatWindow: function(id) {
-            var toPeerId = id;
-            var panel = $('<div class="panel panel-primary chat-div"><div class="panel-heading"></div>' +
+        createChatWindow: function(options) {
+            var toPeerId = options.peerId;
+            var panel = $('<div class="panel panel-primary chat-div"><div class="panel-heading"><i class="fa fa-comments"></i></div>' +
                 '<div class="panel-body"></div><div class="panel-footer">' +
                 '<div class="form-inline"><div class="form-group">' +
                 '</div></div></div></div>')
@@ -179,8 +161,8 @@ function myjsapp(peerClient) {
             var message = $('<input type="text" class="form-control" placeholder="Enter Message">')
             var sendBtn = $('<button type="button" class="btn btn-outline-primary">Send</button>')
             var callButton = $('<a class="portfolio-link">');
-            var videoCall = $('<i class="fa fa-video-camera fa-2x call-icon" aria-hidden="true"></i>');
-            var audioCall = $('<i class="fa fa-phone fa-2x call-icon" aria-hidden="true"></i></a>');
+            var videoCall = $('<i class="fa fa-video-camera call-icon" aria-hidden="true"></i>');
+            var audioCall = $('<i class="fa fa-phone call-icon" aria-hidden="true"></i></a>');
 
             callButton.append(audioCall).append(videoCall);
 
@@ -240,9 +222,12 @@ function myjsapp(peerClient) {
             // TODO - Hide panels if more than 3
         },
 
-        appendHistory : appendToHistory,
+        appendHistory : function(options) {
+            appendToHistory(options.peerId, options.data)
+        },
 
-        closeChatWindow : function (id) {
+        closeChatWindow : function (options) {
+            var id = options.peerId
             if(chatPanel[id]) {
                 chatPanel[id].remove()
                 delete chatPanel[id]
@@ -256,38 +241,39 @@ function myjsapp(peerClient) {
             else
                 $('#videoCallPanel .title').text('Voice Call')
         },
-        showIncomingCall : function (peerId, options) {
+        showIncomingCall : function (options) {
             $('#callConfirmationModal').modal('show')
-            if(options['video'])
-                var txt = "Incoming Video call from : " + peerId
+            if(options.metadata['video'])
+                var txt = "Incoming Video call from : " + options.peerId
             else
-                var txt = "Incoming Voice call from : " + peerId
+                var txt = "Incoming Voice call from : " + options.peerId
             $('#callConfirmationModal .peer-name').text(txt)
         },
         closeVideoCall : function () {
             $('.end-call').click()
         },
-        setTheirVideo : function (stream) {
+        setTheirVideo : function (options) {
             var video = document.getElementById('their-video');
             if (typeof video.srcObject == "object") {
-                video.srcObject = stream;
+                video.srcObject = options.stream;
             } else {
-                video.src = URL.createObjectURL(stream);
+                video.src = URL.createObjectURL(options.stream);
             }
         },
-        setMyVideo : function (stream) {
-            // $('#my-video').prop('src', stream);
+        setMyVideo : function (options) {
+            // $('#my-video').prop('src', options.stream);
             var video = document.getElementById('my-video');
             if (typeof video.srcObject == "object") {
-                video.srcObject = stream;
+                video.srcObject = options.stream;
             } else {
-                video.src = URL.createObjectURL(stream);
+                video.src = URL.createObjectURL(options.stream);
             }
         },
-        showError : function (msg) {
-            
+        showError : function (options) {
+            // options.msg
         },
-        updateOnlieUsers : function (users) {
+        updateOnlieUsers : function (options) {
+            var users = options.users;
             var list = $('.onlinepeers')
             list.empty()
             if(users.length == 0) {
@@ -301,10 +287,48 @@ function myjsapp(peerClient) {
             }
         }
     };
+
+    peerClient.addCallback(function(options) {
+        chat_app[options['name']](options)
+    });
 }
 
-var myapp, peerapp;
+
+// Utilities --- 
+function cookieUtil() {
+    return {
+        // Read cookie
+        get : function getCookie (name) {
+            var cookies = {};
+            var c = document.cookie.split('; ');
+            for (i = c.length - 1; i >= 0; i--) {
+                var C = c[i].split('=');
+                cookies[C[0]] = C[1];
+            }
+            return cookies[name] || null;
+        },
+
+        // create cookie
+        set : function createCookie (name, value, minutes) {
+            if (minutes) {
+                var date = new Date();
+                date.setTime(date.getTime() + (minutes * 60 * 1000));
+                var expires = "; expires=" + date.toGMTString();
+            } else
+                var expires = "";
+            document.cookie = name + "=" + value + expires + "; path=/";
+        },
+
+        remove : function deleteCookie (name) {
+            var date = new Date();
+            date.setTime(date.getTime() - 60 * 1000);
+            document.cookie = name + "=; expires=" + date.toGMTString() + "; path=/";
+        }
+    };
+}
+
+var myapp;
 
 $(document).ready(function () {
-    myapp = myjsapp(peerapp);
+    myapp = myjsapp(peerapp());
 });

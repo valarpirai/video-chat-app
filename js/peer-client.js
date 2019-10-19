@@ -1,4 +1,4 @@
-peerapp = (function() {
+peerapp = function() {
     'use strict';
 
     console.log("Peer client started");
@@ -8,9 +8,8 @@ peerapp = (function() {
     var connectedPeers = {};
     var myPeerID = generateRandomID(4);
     var peer;
-    var peerIdAlreadyTakenCount = 3;
 
-    // Compatibility shim
+    // Compatibility shim for Camera and Mic
     navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
 
     // Connect to server
@@ -44,17 +43,20 @@ peerapp = (function() {
         // Handle a chat connection.
         if (c.label === 'chat') {
             // c.peer
-            myapp.createChatWindow(c.peer)
+            // myapp.createChatWindow(c.peer)
+            peerClientCallbacks({name: 'createChatWindow', peerId: c.peer});
 
             c.on('data', function(data) {
                 console.log(c.peer + ' : ' + data);
                 // Append data to chat history
-                myapp.appendHistory(c.peer, data)   
+                // myapp.appendHistory(c.peer, data)
+                peerClientCallbacks({name: 'appendHistory', peerId: c.peer, data: data});
             });
 
             c.on('close', function() {
                 delete connectedPeers[c.peer];
-                myapp.closeChatWindow(c.peer)
+                // myapp.closeChatWindow(c.peer)
+                peerClientCallbacks({name: 'closeChatWindow', peerId: c.peer});                
             });
             connectedPeers[c.peer] = c;
         } else if (c.label === 'file') {
@@ -81,14 +83,16 @@ peerapp = (function() {
 
         // Wait for stream on the call, then set peer video display
         call.on('stream', function(stream) {
-            myapp.setTheirVideo(stream)
+            // myapp.setTheirVideo(stream)
+            peerClientCallbacks({name: 'setTheirVideo', stream: stream});
         });
 
         // UI stuff
         window.existingCall = call;
         call.on('close', function() {
             console.log("Call Ending")
-            myapp.closeVideoCall()
+            // myapp.closeVideoCall()
+            peerClientCallbacks({name: 'closeVideoCall'});            
         });
     }
 
@@ -96,7 +100,7 @@ peerapp = (function() {
         peer.on('open', function(id) {
             console.log('My peer ID is: ' + id);
             console.log(new Date());
-            myapp.setPeerId(id);
+            peerClientCallbacks({name: 'setPeerId', peerId: id});            
             fetchOnlinePeers();
         });
 
@@ -120,7 +124,8 @@ peerapp = (function() {
                 rejectIncomingCall(call)
             } else {
                 window.incomingCall = call
-                myapp.showIncomingCall(call.peer, call.options.metadata);
+                // myapp.showIncomingCall(call.peer, call.options.metadata);
+                peerClientCallbacks({name: 'showIncomingCall', peerId: call.peer, metadata: call.options.metadata});
             }
             // }
         });
@@ -149,13 +154,10 @@ peerapp = (function() {
             console.log(err)
             if("unavailable-id" == err.type) {
                 // ID Already taken, so assigning random ID after 3 attempts
-                peerIdAlreadyTakenCount++;
-                if(peerIdAlreadyTakenCount >= 3) {
-                    peerIdAlreadyTakenCount = 0;
-                    myPeerID = generateRandomID(4);
-                }
+                myPeerID = generateRandomID(4);
             } else if ("peer-unavailable" == err.type) {
-                myapp.showError(err.message)
+                // myapp.showError(err.message)
+                peerClientCallbacks({name: 'showError', msg: err.message});
             }
         });
     };
@@ -208,7 +210,8 @@ peerapp = (function() {
         navigator.getUserMedia(options, function(stream) {
             // Set your video displays
             window.localStream = stream;
-            myapp.setMyVideo(window.localStream)
+            // myapp.setMyVideo(window.localStream)
+            peerClientCallbacks({name: 'setMyVideo', stream: window.localStream});
             if(callback)
                 callback();
         }, function(err) {
@@ -225,7 +228,8 @@ peerapp = (function() {
             options['video'] = true;
 
         initializeLocalMedia(options, function() {
-            myapp.showVideoCall(options)
+            // myapp.showVideoCall(options)
+            peerClientCallbacks({name: 'showVideoCall', metadata: options});
             var call = peer.call(callerID, window.localStream, { 'metadata' : options });
             callConnect(call)
         });
@@ -238,7 +242,8 @@ peerapp = (function() {
 
         initializeLocalMedia(metadata, function() {
             call.answer(window.localStream);
-            myapp.showVideoCall(metadata);
+            // myapp.showVideoCall(metadata);
+            peerClientCallbacks({name: 'showVideoCall', metadata: metadata});
             callConnect(call)
         });
     }
@@ -297,7 +302,7 @@ peerapp = (function() {
         if (!!peer && !peer.destroyed) {
             peer.destroy();
         }
-    };
+    }
 
     function fetchOnlinePeers() {
         $.ajax("https://" + PEER_SERVER + "/peerjs/" + myPeerID + "/onlineusers")
@@ -305,15 +310,27 @@ peerapp = (function() {
             // console.log(data);
             if(data.msg == 'Success') {
                 data.users.splice(data.users.indexOf(myPeerID), 1)
-                myapp.updateOnlieUsers(data.users)
+                // myapp.updateOnlieUsers(data.users)
+                peerClientCallbacks({name: 'updateOnlieUsers', users: data.users});
             }
         });
     }
 
-    // Update Online users on every 5 seconds
+    // Update Online users on every 3 seconds
     setInterval(function () {
         fetchOnlinePeers()
-    }, 5000)
+    }, 3000);
+
+    function peerClientCallbacks(options) {
+        for (let index = 0; index < callbacks.length; index++) {
+            callbacks[index](options);
+        }
+    }
+
+    var callbacks = [];
+    function setCallbacks(fn) {
+        callbacks.push(fn);
+    }
 
     return {
         makeCall : makeCall,
@@ -324,6 +341,7 @@ peerapp = (function() {
         acceptIncomingCall : acceptIncomingCall,
         rejectIncomingCall : rejectIncomingCall,
         muteAudio : muteAudio,
-        muteVideo : muteVideo
+        muteVideo : muteVideo,
+        addCallback : setCallbacks
     }
-})();
+};

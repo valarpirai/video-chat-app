@@ -7,29 +7,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>Video Chat</title>
+    <title>Video Chat App</title>
+    <link rel="icon" href="/fav_icon.png" type="image/png" sizes="16x16">
     <!-- Bootstrap Core CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <!-- Custom Fonts -->
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
-    <link href='https://fonts.googleapis.com/css?family=Kaushan+Script' rel='stylesheet' type='text/css'>
-    <link href='https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
     <!-- Theme CSS -->
-    <link href="css/agency.css" rel="stylesheet">
+    <link href="css/common.css" rel="stylesheet">
 </head>
 
 <body>
-    <nav class="navbar navbar-toggleable-sm navbar-inverse fixed-top bg-inverse">
-        <a class="navbar-brand" href="/">Video chat App</a>
+    <nav class="navbar navbar-toggleable-sm navbar-dark bg-dark navbar-inverse fixed-top bg-inverse">
+        <div class="container">
+            <a class="navbar-brand" href="/">Video chat App</a>
+        </div>
     </nav>
 
     <section id="chat-app">
     	<div class="container">
     		<div class="row">
     			<div class="col-lg-6 col-md-6 mb-4">
-    				Your ID: <h4 id="peer-id" data-toggle="tooltip" data-placement="top" title="Click to copy peer ID"></h3>
+    				<h4 id="peer-id" data-toggle="tooltip" data-placement="top" title="Click to copy peer ID">Name</h3>
                     <a href="#getUserNameModal" data-toggle="modal">change</a>
     			</div>
     			<div class="col-lg-6 col-md-6 mb-5 hide">
@@ -60,37 +60,30 @@
 		</div>
     </div>
 
-    <!-- Portfolio Modals -->
-    <!-- Use the modals below to showcase details about your portfolio projects! -->
-    <!-- Portfolio Modal 1 -->
-    <div class="portfolio-modal modal" id="videoCallPanel" tabindex="-1" role="dialog" data-keyboard="false" aria-hidden="true">
-        <div class="modal-dialog">
+    <div class="modal fade" id="videoCallPanel" tabindex="-1" role="dialog" aria-labelledby="callModelLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
             <div class="modal-content">
-                <div class="close-modal end-call hide" data-dismiss="modal">
-                    <div class="lr">
-                        <div class="rl">
-                        </div>
-                    </div>
+                <div class="modal-header">
+                    <h5 class="modal-title" id="callModelLabel">Video Call - </h5>
                 </div>
-                <div class="container">
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="modal-body">
-                                <!-- Project Details Go Here -->
-                                <h2 class="title">Video Call</h2>
-                                <div class="pure-u-2-3" id="video-container">
-                                    <video id="their-video" autoplay=""></video>
-                                    <video id="my-video" muted="true" autoplay=""></video>
-                                </div>
-                                
-                                <div class="text-center mt-3">
-                                    <button type="button" class="btn btn-secondary mute-audio ml-3 mt-2"><i class="fa fa-microphone-slash"></i>Mute Audio</button>
-                                    <button type="button" class="btn btn-secondary mute-video ml-3 mt-2"><i class="fa fa-video-camera"></i>Mute Video</button>
-                                    <button type="button" class="btn btn-danger end-call ml-3 mt-2" data-dismiss="modal"><i class="fa fa-times"></i>End Call</button>
+                <div class="modal-body">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="modal-body">
+                                    <div class="pure-u-2-3" id="video-container">
+                                        <video id="their-video" autoplay=""></video>
+                                        <video id="my-video" muted="true" autoplay=""></video>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                </div>
+                <div class="modal-footer video-call-action">
+                    <button type="button" class="btn btn-secondary mute-audio"><i class="fa fa-microphone-slash"></i><span>Mute Audio</span></button>
+                    <button type="button" class="btn btn-secondary mute-video"><i class="fa fa-video-camera"></i><span>Mute Video</span></button>
+                    <button type="button" class="btn btn-danger end-call" data-dismiss="modal"><i class="fa fa-times"></i><span>End Call</span></button>
                 </div>
             </div>
         </div>
@@ -133,9 +126,8 @@
 
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
-
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     
     <script src="js/peer.js"></script>
     <script src="js/app.js"></script>
