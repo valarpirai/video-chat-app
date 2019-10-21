@@ -77,7 +77,7 @@ function myjsapp(peerClient) {
 
         
         $('.accept-call').click(function (event) {
-            // End established call
+            // Accept new call
             peerClient.acceptIncomingCall();
         })
         $('.reject-call').click(function (event) {
@@ -236,10 +236,10 @@ function myjsapp(peerClient) {
         },
         showVideoCall : function (options) {
             $('#videoCallPanel').modal('show')
-            if(options['video'])
-                $('#videoCallPanel .title').text('Video Call')
+            if(options.metadata['video'])
+                $('#videoCallPanel .modal-title').text('Video Call : ' + options.peerId)
             else
-                $('#videoCallPanel .title').text('Voice Call')
+                $('#videoCallPanel .modal-title').text('Voice Call : ' + options.peerId)
         },
         showIncomingCall : function (options) {
             $('#callConfirmationModal').modal('show')

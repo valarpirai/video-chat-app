@@ -141,11 +141,11 @@ peerapp = function() {
             if(conn != myPeerID) {
                 return
             }            
-            setTimeout(function () {
-                connectToServerWithId();
-            }, 5000);
+            // setTimeout(function () {
+            //     connectToServerWithId();
+            // }, 1000);
             
-            // peer.reconnect()
+            peer.reconnect()
         });
 
         peer.on('error', function(err) {
@@ -221,7 +221,7 @@ peerapp = function() {
     }
 
     function makeCall(callerID, isVideoCall) {
-        console.log("Calling..." +  callerID)
+        console.log((isVideoCall ? 'Video' : 'Voice') + " Calling..." +  callerID)
         
         var options = {audio: true};
         if(isVideoCall)
@@ -229,7 +229,7 @@ peerapp = function() {
 
         initializeLocalMedia(options, function() {
             // myapp.showVideoCall(options)
-            peerClientCallbacks({name: 'showVideoCall', metadata: options});
+            peerClientCallbacks({name: 'showVideoCall', metadata: options, peerId: callerID});
             var call = peer.call(callerID, window.localStream, { 'metadata' : options });
             callConnect(call)
         });
@@ -238,12 +238,12 @@ peerapp = function() {
     function acceptIncomingCall() {
         var call = window.incomingCall;
         var metadata = call.options.metadata;
-        console.log(metadata);
+        console.log(call);
 
         initializeLocalMedia(metadata, function() {
             call.answer(window.localStream);
             // myapp.showVideoCall(metadata);
-            peerClientCallbacks({name: 'showVideoCall', metadata: metadata});
+            peerClientCallbacks({name: 'showVideoCall', metadata: metadata, peerId: call.peer});
             callConnect(call)
         });
     }
@@ -319,7 +319,7 @@ peerapp = function() {
     // Update Online users on every 3 seconds
     setInterval(function () {
         fetchOnlinePeers()
-    }, 3000);
+    }, 6000);
 
     function peerClientCallbacks(options) {
         for (let index = 0; index < callbacks.length; index++) {
